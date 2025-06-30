@@ -1,0 +1,40 @@
+services:
+
+  monitoring:
+    restart: unless-stopped
+    image: checkmk/check-mk-raw
+    container_name: monitoring
+    ports:
+      - "0.0.0.0:8080:5000"
+      - "0.0.0.0:8000:8000"
+    volumes:
+      - monitoring:/omd/sites
+      - /etc/localtime:/etc/localtime:ro
+    tmpfs:
+      - /opt/omd/sites/cmk/tmp:uid=1000,gid=1000
+    tty: true
+    stdin_open: true
+    networks:
+      - monitoring
+    environment:
+      - TZ=Europe/Berlin
+
+  sdp:
+    restart: unless-stopped
+    image: manageengine-sdp
+    container_name: sdp
+    ports:
+      - "0.0.0.0:8443:8443"
+    networks:
+      - monitoring
+    volumes:
+      - /opt/manageengine-sdp/ServiceDesk:/opt/manageengine-sdp/ServiceDesk
+    environment:
+      - TZ=Europe/Berlin
+
+networks:
+  monitoring:
+    external: true
+
+volumes:
+  monitoring:

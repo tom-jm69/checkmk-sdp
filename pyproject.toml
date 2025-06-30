@@ -1,0 +1,17 @@
+[project]
+name = "Checkmk_SDP_Integration"
+version = "0.1.0"
+description = "A python application that utilizes the Service Desk Plus REST API to create tickets automatically based on a host or a service notification."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiohttp>=3.11.18",
+    "asqlite>=2.0.0",
+    "bcrypt>=4.3.0",
+    "fastapi>=0.115.12",
+    "pre-commit>=4.2.0",
+    "python-dateutil>=2.9.0.post0",
+    "python-dotenv>=1.1.0",
+    "requests>=2.32.3",
+    "uvicorn>=0.34.2",
+]

@@ -1,0 +1,18 @@
+services:
+  sdchapp:
+    image: scapp-uv
+    restart: unless-stopped
+    build: .
+    ports:
+      - 8083:8083
+    volumes:
+      - ./conf.py:/app/conf.py:ro # Mount config in container
+      - ./logs:/app/logs # Make logs persistent
+      - ./db:/app/db # Make database persistent
+    environment:
+      - TZ=Europe/Berlin
+    networks:
+      - monitoring
+networks:
+  monitoring:
+    external: true

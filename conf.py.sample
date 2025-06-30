@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025-present Tom Müller - License: GNU General Public License v3
+# This file is part of the Checkmk-sdp API client. It is subject to the terms and
+# conditions defined in the file LICENSE or at <https://www.gnu.org/licenses/>.
+# ==============================================================================
+# Imports
+# ==============================================================================
+
+import logging
+import os
+
+# ==============================================================================
+# Logging Configuration
+# ==============================================================================
+LOG_LEVEL = os.getenv("LOG_LEVEL", logging.INFO)
+
+# Container
+LOG_PATH = "logs"
+
+# ==============================================================================
+# API Server Configuration
+# ==============================================================================
+FASTAPI_ADDRESS = "0.0.0.0"
+FASTAPI_PORT = 8083
+TOKEN_HASH = b"$2b$05$WJU.G7QxfBn6OYFVbgPjU.QLkqqxy7Sgb6sSShSroya6txhZRNaZe"
+
+# ==============================================================================
+# Database Configuration
+# ==============================================================================
+DB_NAME = "production"
+
+# Container
+DB_PATH = "/app/db"
+DB_SCHEME_BASEPATH = "/app/src/app/database/schemas"
+
+# ==============================================================================
+# Service Desk Plus (SDP) Configuration
+# ==============================================================================
+SDP_URL = "sdp"
+SDP_PORT = 8443
+SDP_SCHEME = "https"
+SDP_SECRET = "398E8AA0-4A39-46AD-B266-07761A0C20D1"  # admin user
+SDP_REQUESTER_NAME = "Checkmk"
+SDP_REQUESTER_ID = 607
+SDP_TIMEOUT = 10
+SDP_VERIFY_SSL = False
+SDP_API_VERSION = "v3"
+SDP_HOST_TEMPLATE_ID = 602
+SDP_SERVICE_TEMPLATE_ID = 301
+
+# ==============================================================================
+# SDP: Service Template Fields
+# ==============================================================================
+SDP_SERVICE_NAME_API_FIELD = "udf_sline_906"
+SDP_SERVICE_STATUS_API_FIELD = "udf_pick_1503"
+SDP_SERVICE_OUTPUT_API_FIELD = "udf_mline_1501"
+SDP_SERVICE_OUTPUT_LONG_API_FIELD = "udf_mline_1502"
+SDP_SERVICE_DESCRIPTION_API_FIELD = "udf_sline_901"
+SDP_SERVICE_LAST_STATE_CHANGE_API_FIELD = "udf_date_1201"
+SDP_SERVICE_CHECK_COMMAND_API_FIELD = "udf_sline_610"
+SDP_SERVICE_URL_API_FIELD = "udf_sline_907"
+SDP_HOST_NAME_API_FIELD = "udf_sline_605"
+SDP_HOST_ALIAS_API_FIELD = "udf_sline_606"
+SDP_HOST_IPV4_API_FIELD = "udf_sline_902"
+SDP_HOST_STATE_API_FIELD = "udf_pick_1509"
+SDP_HOST_URL_API_FIELD = "udf_sline_612"
+SDP_CONTACTS_API_FIELD = "udf_sline_1505"
+SDP_ALARM_DATE_API_FIELD = "udf_date_613"
+SDP_SERVICE_OK_ID = 301
+SDP_SERVICE_WARN_ID = 302
+SDP_SERVICE_CRITICAL_ID = 303
+SDP_SERVICE_UNKNOWN_ID = 304
+
+# ==============================================================================
+# SDP: Host Template Fields
+# ==============================================================================
+SDP_HOST_CHECK_COMMAND_API_FIELD = "udf_sline_1506"
+SDP_HOST_LAST_STATE_CHANGE_API_FIELD = "udf_date_1507"
+SDP_HOST_LAST_STATE_UP_API_FIELD = "udf_date_1508"
+SDP_HOST_OUTPUT_API_FIELD = "udf_sline_904"
+SDP_HOST_UP_ID = 305
+SDP_HOST_DOWN_ID = 306
+SDP_HOST_UNREACH_ID = 306
+
+# ==============================================================================
+# Checkmk Configuration
+# ==============================================================================
+CHECKMK_URL = "monitoring"
+CHECKMK_PORT = 5000
+CHECKMK_SCHEME = "http"
+CHECKMK_SECRET = "pQgh5x5mL*eKjVPA"
+CHECKMK_USERNAME = "rest_api"
+CHECKMK_SITE_NAME = "cmk"
+CHECKMK_VERIFY_SSL = False
+CHECKMK_API_VERSION = "1.0"
