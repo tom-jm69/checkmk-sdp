@@ -18,7 +18,7 @@ except ImportError:
     exit(1)
 
 
-API_URL = "http://172.18.0.4:8083"
+API_URL = "http://172.18.0.3:8083"
 NOTIFICATION_TYPE = os.environ.get("NOTIFY_WHAT", "")  # HOST / SERVICE
 session = requests.Session()
 headers = {
