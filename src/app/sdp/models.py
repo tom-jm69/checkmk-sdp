@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, field_validator
 
 import src.conf as conf
+from datetime import datetime
 
 from .enums import PriorityEnum
 
@@ -48,8 +49,16 @@ class TimeValue(BaseModel):
 
 
 class TimeValueSDP(BaseModel):
-    value: Optional[str] = None
+    value: Optional[int] = None
     display_value: Optional[str] = None
+
+    @field_validator("display_value", mode="before")
+    def display_value_parsed(cls, value):
+        try:
+            timestamp = int(value)
+            return datetime.fromtimestamp(timestamp).strftime("%d/%m/%Y : %H:%M:%S")
+        except (ValueError, TypeError):
+            raise ValueError("display_value must be a valid Unix timestamp (int or str)")
 
 
 class User(BaseModel):
@@ -103,7 +112,9 @@ class Filter(BaseModel):
 
 class ServiceTemplateFields(BaseModel):
     servicename: Optional[str] = Field(None, alias=conf.SDP_SERVICE_NAME_API_FIELD)
-    servicestatus: Optional[str] = Field(None, alias=conf.SDP_SERVICE_STATUS_API_FIELD)
+    servicestatus: Optional[PickField] = Field(
+        None, alias=conf.SDP_SERVICE_STATUS_API_FIELD
+    )
     serviceoutput: Optional[str] = Field(None, alias=conf.SDP_SERVICE_OUTPUT_API_FIELD)
     serviceoutputlong: Optional[str] = Field(
         None, alias=conf.SDP_SERVICE_OUTPUT_LONG_API_FIELD
@@ -121,7 +132,7 @@ class ServiceTemplateFields(BaseModel):
     hostname: Optional[str] = Field(None, alias=conf.SDP_HOST_NAME_API_FIELD)
     hostalias: Optional[str] = Field(None, alias=conf.SDP_HOST_ALIAS_API_FIELD)
     hostipv4: Optional[str] = Field(None, alias=conf.SDP_HOST_IPV4_API_FIELD)
-    hoststate: Optional[str] = Field(None, alias=conf.SDP_HOST_STATE_API_FIELD)
+    hoststate: Optional[PickField] = Field(None, alias=conf.SDP_HOST_STATE_API_FIELD)
     hosturl: Optional[str] = Field(None, alias=conf.SDP_HOST_URL_API_FIELD)
     contacts: Optional[str] = Field(None, alias=conf.SDP_CONTACTS_API_FIELD)
     alarmdate: Optional[TimeValueSDP] = Field(None, alias=conf.SDP_ALARM_DATE_API_FIELD)
@@ -144,7 +155,7 @@ class HostTemplateFields(BaseModel):
     hostname: Optional[str] = Field(None, alias=conf.SDP_HOST_NAME_API_FIELD)
     hostalias: Optional[str] = Field(None, alias=conf.SDP_HOST_ALIAS_API_FIELD)
     hostipv4: Optional[str] = Field(None, alias=conf.SDP_HOST_IPV4_API_FIELD)
-    hoststate: Optional[str] = Field(None, alias=conf.SDP_HOST_STATE_API_FIELD)
+    hoststate: Optional[PickField] = Field(None, alias=conf.SDP_HOST_STATE_API_FIELD)
     hostcheckcommand: Optional[str] = Field(
         None, alias=conf.SDP_HOST_CHECK_COMMAND_API_FIELD
     )
