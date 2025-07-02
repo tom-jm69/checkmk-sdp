@@ -14,7 +14,6 @@ from src.app.utils.exceptions import BadResponseError, JSONParseError
 from src.app.utils.models import ResponseDetails
 from src.app.utils.wrapper import Wrapper
 
-from .enums import PickHostState, PickServiceState
 from .exceptions import (
     SDPInvalidRequestDataError,
     SDPNoValidAuthentication,
@@ -33,7 +32,6 @@ from .models import (
     CreationRequestDataModel,
     HostTemplateFields,
     IncidentTemplateResponse,
-    PickField,
     Request,
     RequestPriority,
     RequestType,
@@ -252,10 +250,7 @@ class SDP(Wrapper):
             request_prio = RequestPriority.from_enum(priority)
             if isinstance(checkmk_payload, ServiceNotification):
                 """service template"""
-                state = PickField(
-                    name=checkmk_payload.service_state,
-                    id=PickServiceState[checkmk_payload.service_state].value,
-                )
+                state = checkmk_payload.service_state
                 fields = ServiceTemplateFields(
                     servicename=checkmk_payload.service_name,
                     servicecheckcommand=checkmk_payload.service_check_command,
@@ -264,9 +259,12 @@ class SDP(Wrapper):
                     serviceoutputlong=checkmk_payload.service_output_long,
                     servicedescription=checkmk_payload.service_desc,
                     servicelaststatechange=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.service_last_state_change.timestamp() * 1000
-                        ),  # convert to millis
+                        value=str(
+                            int(
+                                checkmk_payload.service_last_state_change.timestamp()
+                                * 1000
+                            )
+                        ),
                         display_value=checkmk_payload.service_last_state_change.strftime(
                             "%d/%m/%Y : %H:%M:%S"
                         ),
@@ -275,13 +273,15 @@ class SDP(Wrapper):
                     hostname=checkmk_payload.host_name,
                     hostalias=checkmk_payload.host_alias,
                     hostipv4=checkmk_payload.host_ipv4,
-                    hoststate=PickField(name=checkmk_payload.host_state),
+                    hoststate=checkmk_payload.host_state,
                     hosturl=checkmk_payload.host_url,
                     contacts=checkmk_payload.contacts,
                     alarmdate=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.notification_datetime_long.timestamp()
-                            * 1000
+                        value=str(
+                            int(
+                                checkmk_payload.notification_datetime_long.timestamp()
+                                * 1000
+                            )
                         ),
                         display_value=checkmk_payload.notification_datetime_long.strftime(
                             "%d/%m/%Y : %H:%M:%S"
@@ -290,10 +290,7 @@ class SDP(Wrapper):
                 )  # type: ignore
             elif isinstance(checkmk_payload, HostNotification):
                 """host template"""
-                state = PickField(
-                    name=checkmk_payload.host_state,
-                    id=PickHostState[checkmk_payload.host_state].value,
-                )
+                state = checkmk_payload.host_state
                 fields = HostTemplateFields(
                     hoststate=state,
                     hostipv4=checkmk_payload.host_ipv4,
@@ -303,14 +300,19 @@ class SDP(Wrapper):
                     hostoutput=checkmk_payload.host_output,
                     contacts=checkmk_payload.contacts,
                     hostlaststatechange=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.host_last_state_change.timestamp() * 1000
+                        value=str(
+                            int(
+                                checkmk_payload.host_last_state_change.timestamp()
+                                * 1000
+                            )
                         ),  # convert to millis
                     ),
                     alarmdate=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.notification_datetime_long.timestamp()
-                            * 1000
+                        value=str(
+                            int(
+                                checkmk_payload.notification_datetime_long.timestamp()
+                                * 1000
+                            )
                         ),
                         display_value=checkmk_payload.notification_datetime_long.strftime(
                             "%d/%m/%Y : %H:%M:%S"
@@ -318,8 +320,8 @@ class SDP(Wrapper):
                         # convert to millis
                     ),
                     hostlaststateup=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.host_last_up.timestamp() * 1000
+                        value=str(
+                            int(checkmk_payload.host_last_up.timestamp() * 1000)
                         ),  # convert to millis
                         display_value=checkmk_payload.host_last_up.strftime(
                             "%d/%m/%Y : %H:%M:%S"
@@ -327,13 +329,13 @@ class SDP(Wrapper):
                     ),
                 )  # type: ignore
             model = CreationRequest(
-                subject=f"{subject} - {state.name}",
+                subject=f"{subject} - {state}",
                 description=description,
                 requester=User(id=self.requester_id, name=self.requester_name),
                 resolution=Resolution(content=resolution),
                 impact_details=impact_details,
                 status=Status(name=ticket_status),
-                request_type=RequestType(name=request_type),
+                request_type=RequestType(name=request_type, id=1),
                 template=Template(id=template_id),
                 udf_fields=fields,
                 priority=request_prio,
