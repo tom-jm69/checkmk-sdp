@@ -254,7 +254,7 @@ class SDP(Wrapper):
                 """service template"""
                 state = PickField(
                     name=checkmk_payload.service_state,
-                    id=PickServiceState[checkmk_payload.service_state].value,
+                    id=PickServiceState[checkmk_payload.service_state],
                 )
                 fields = ServiceTemplateFields(
                     servicename=checkmk_payload.service_name,
@@ -264,8 +264,11 @@ class SDP(Wrapper):
                     serviceoutputlong=checkmk_payload.service_output_long,
                     servicedescription=checkmk_payload.service_desc,
                     servicelaststatechange=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.service_last_state_change.timestamp() * 1000
+                        value=str(
+                            int(
+                                checkmk_payload.service_last_state_change.timestamp()
+                                * 1000
+                            )
                         ),  # convert to millis
                         display_value=checkmk_payload.service_last_state_change.strftime(
                             "%d/%m/%Y : %H:%M:%S"
@@ -275,13 +278,17 @@ class SDP(Wrapper):
                     hostname=checkmk_payload.host_name,
                     hostalias=checkmk_payload.host_alias,
                     hostipv4=checkmk_payload.host_ipv4,
-                    hoststate=PickField(name=checkmk_payload.host_state),
+                    hoststate=PickField(
+                        name=checkmk_payload.host_state,
+                    ),
                     hosturl=checkmk_payload.host_url,
                     contacts=checkmk_payload.contacts,
                     alarmdate=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.notification_datetime_long.timestamp()
-                            * 1000
+                        value=str(
+                            int(
+                                checkmk_payload.notification_datetime_long.timestamp()
+                                * 1000
+                            )
                         ),
                         display_value=checkmk_payload.notification_datetime_long.strftime(
                             "%d/%m/%Y : %H:%M:%S"
@@ -303,14 +310,19 @@ class SDP(Wrapper):
                     hostoutput=checkmk_payload.host_output,
                     contacts=checkmk_payload.contacts,
                     hostlaststatechange=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.host_last_state_change.timestamp() * 1000
+                        value=str(
+                            int(
+                                checkmk_payload.host_last_state_change.timestamp()
+                                * 1000
+                            )
                         ),  # convert to millis
                     ),
                     alarmdate=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.notification_datetime_long.timestamp()
-                            * 1000
+                        value=str(
+                            int(
+                                checkmk_payload.notification_datetime_long.timestamp()
+                                * 1000
+                            )
                         ),
                         display_value=checkmk_payload.notification_datetime_long.strftime(
                             "%d/%m/%Y : %H:%M:%S"
@@ -318,8 +330,8 @@ class SDP(Wrapper):
                         # convert to millis
                     ),
                     hostlaststateup=TimeValueSDP(
-                        value=int(
-                            checkmk_payload.host_last_up.timestamp() * 1000
+                        value=str(
+                            int(checkmk_payload.host_last_up.timestamp() * 1000)
                         ),  # convert to millis
                         display_value=checkmk_payload.host_last_up.strftime(
                             "%d/%m/%Y : %H:%M:%S"

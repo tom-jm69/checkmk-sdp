@@ -30,8 +30,8 @@ async def handle_notification_request(
     app: FastAPI,
     db: DB,
     request_description: str = "This request has been created by checkmk.",
-    impact_details: str = "None",
-    resolution: str = "None",
+    impact_details: str = "Impacted.",
+    resolution: str = "Alarm is resolved.",
 ) -> NotificationResponse:
     """
     Handle incoming Checkmk notifications and create an SDP request if needed.

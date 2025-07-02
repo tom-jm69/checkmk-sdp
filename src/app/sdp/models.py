@@ -8,7 +8,6 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, field_validator
 
 import src.conf as conf
-from datetime import datetime
 
 from .enums import PriorityEnum
 
@@ -51,14 +50,6 @@ class TimeValue(BaseModel):
 class TimeValueSDP(BaseModel):
     value: Optional[int] = None
     display_value: Optional[str] = None
-
-    @field_validator("display_value", mode="before")
-    def display_value_parsed(cls, value):
-        try:
-            timestamp = int(value)
-            return datetime.fromtimestamp(timestamp).strftime("%d/%m/%Y : %H:%M:%S")
-        except (ValueError, TypeError):
-            raise ValueError("display_value must be a valid Unix timestamp (int or str)")
 
 
 class User(BaseModel):
