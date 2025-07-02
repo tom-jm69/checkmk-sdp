@@ -266,7 +266,10 @@ class SDP(Wrapper):
                     servicelaststatechange=TimeValueSDP(
                         value=int(
                             checkmk_payload.service_last_state_change.timestamp() * 1000
-                        )  # convert to millis
+                        ),  # convert to millis
+                        display_value=checkmk_payload.service_last_state_change.strftime(
+                            "%d/%m/%Y : %H:%M:%S"
+                        ),
                     ),
                     serviceurl=checkmk_payload.service_url,
                     hostname=checkmk_payload.host_name,
@@ -279,7 +282,10 @@ class SDP(Wrapper):
                         value=int(
                             checkmk_payload.notification_datetime_long.timestamp()
                             * 1000
-                        )  # convert to millis
+                        ),
+                        display_value=checkmk_payload.notification_datetime_long.strftime(
+                            "%d/%m/%Y : %H:%M:%S"
+                        ),
                     ),
                 )  # type: ignore
             elif isinstance(checkmk_payload, HostNotification):
@@ -305,12 +311,19 @@ class SDP(Wrapper):
                         value=int(
                             checkmk_payload.notification_datetime_long.timestamp()
                             * 1000
-                        ),  # convert to millis
+                        ),
+                        display_value=checkmk_payload.notification_datetime_long.strftime(
+                            "%d/%m/%Y : %H:%M:%S"
+                        ),
+                        # convert to millis
                     ),
                     hostlaststateup=TimeValueSDP(
                         value=int(
                             checkmk_payload.host_last_up.timestamp() * 1000
-                        )  # convert to millis
+                        ),  # convert to millis
+                        display_value=checkmk_payload.host_last_up.strftime(
+                            "%d/%m/%Y : %H:%M:%S"
+                        ),
                     ),
                 )  # type: ignore
             model = CreationRequest(
